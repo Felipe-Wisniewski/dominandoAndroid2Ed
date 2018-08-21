@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Layouts</string>
+    <string name="btn_first">Primeiro</string>
+    <string name="btn_second">Segundo botão</string>
+    <string name="btn_third">Terceiro botão</string>
+    <string name="btn_fourth">Quarto botão</string>
+    <string name="txt_margin">Margin</string>
+    <string name="txt_padding">Padding</string>
+    <string name="recife_pe">Recife-PE</string>
+    <string name="txt_titulo">Título</string>
+    <string name="sub_titulo">Subtítulo</string>
+</resources>

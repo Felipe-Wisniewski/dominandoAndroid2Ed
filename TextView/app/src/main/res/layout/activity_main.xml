@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Felipe Wisniewski\nEmail: felipewisniewski@gmail.com\nFone: 996768383\n
+                        http://www.flmwg.com"
+        android:autoLink="phone|email|web"
+        android:id="@+id/txt_autoLink"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Texto bem grande para não caber em apenas uma linha nem em duas nem em três
+                        nem em quatro e por ai vai de linha em linha até ocupar todo o espaço!!"
+        android:textSize="24sp"
+        android:ellipsize="end"
+        android:maxLines="2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fonte monospace"
+        android:textSize="20sp"
+        android:typeface="monospace"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fonte Customizada"
+        android:textSize="20sp"
+        android:id="@+id/txt_fontCustom"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Texto Strike"
+        android:textSize="20sp"
+        android:id="@+id/txt_strike"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_html"/>
+
+</LinearLayout>

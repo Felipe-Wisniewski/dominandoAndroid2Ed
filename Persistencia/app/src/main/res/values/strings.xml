@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Persistencia</string>
+    <string name="hint_edt">Digite alguma coisa</string>
+    <string name="rb_interno">Memória Interna</string>
+    <string name="rb_externa_privado">Memória Externa (Privado)</string>
+    <string name="rb_externa_publica">Memória Externa (Pública)</string>
+    <string name="bt_salvar">Salvar</string>
+    <string name="bt_ler">Ler</string>
+    <string name="titulo_cidade">Cidade</string>
+    <string name="pref_cidade">cidade</string>
+    <string name="pref_cidade_default">Recife</string>
+    <string name="titulo_mensagens">Receber mensagens</string>
+    <string name="sumario_mensagens">Aplicação deve receber mensagens</string>
+    <string name="pref_mensagens">mensagens</string>
+    <string name="titulo_rede_social">Rede social</string>
+    <string name="pref_rede_social">rede_social</string>
+    <string name="pref_rede_social_default">gplus</string>
+    <string name="btn_abrir_pref">Abrir Preferências</string>
+    <string name="btn_ler_pref">Ler Preferências</string>
+
+    <string-array name="redes_sociais">
+        <item>Google +</item>
+        <item>Facebook</item>
+        <item>Twitter</item>
+        <item>LinkedIn</item>
+    </string-array>
+
+    <string-array name="redes_sociais_valores">
+        <item>gplus</item>
+        <item>fb</item>
+        <item>twitter</item>
+        <item>linkedin</item>
+    </string-array>
+</resources>

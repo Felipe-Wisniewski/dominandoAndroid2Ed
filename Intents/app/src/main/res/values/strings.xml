@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">Intents</string>
+
+    <string-array name="acoes">
+        <item>Browser - waves.com</item>
+        <item>Realizando uma chamada - love</item>
+        <item>Mapa - Rua Alcides Cruz</item>
+        <item>Tocar música</item>
+        <item>SMS</item>
+        <item>Compartilhar</item>
+        <item>Alarme</item>
+        <item>Buscar na web - Android MVVM</item>
+        <item>Configurações</item>
+        <item>Minha ação 1</item>
+        <item>Minha ação 2</item>
+        <item>Sair</item>
+    </string-array>
+
+    <string name="erro_intent">Ação não suportada.</string>
+
+</resources>

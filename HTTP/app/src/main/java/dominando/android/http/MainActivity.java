@@ -1,0 +1,51 @@
+package dominando.android.http;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class MainActivity extends AppCompatActivity {
+
+    LivroPagerAdapter mPagerAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mPagerAdapter = new LivroPagerAdapter(getSupportFragmentManager());
+
+        ViewPager pager = findViewById(R.id.viewPager_am);
+        pager.setAdapter(mPagerAdapter);
+    }
+
+    class LivroPagerAdapter extends FragmentPagerAdapter {
+
+        LivrosListFragment mList;
+        LivrosGridFragment mGrid;
+
+        public LivroPagerAdapter(FragmentManager fm) {
+            super(fm);
+            mList = new LivrosListFragment();
+            mGrid = new LivrosGridFragment();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return (position == 0) ? mList : mGrid;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return (position == 0) ? "Lista" : "Grid";
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+    }
+}
