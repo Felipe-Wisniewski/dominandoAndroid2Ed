@@ -1,38 +1,83 @@
 package dominando.android.webservice;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HotelListFragment extends ListFragment implements ActionMode.Callback,
-        AdapterView.OnItemLongClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        AdapterView.OnItemLongClickListener, LoaderManager.LoaderCallbacks<Cursor>,
+        SwipeRefreshLayout.OnRefreshListener{
 
     ListView mListView;
     ActionMode mActionMode;
     CursorAdapter mAdapter;
     String mTextoBusca;
     HotelRepositorio mRepositorio;
+    SwipeRefreshLayout mSwipeLayout;
+
+    BroadcastReceiver mServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mSwipeLayout.setRefreshing(false);
+            if(!intent.getBooleanExtra(HotelIntentService.EXTRA_SUCESSO, false)){
+                Toast.makeText(getActivity(), R.string.erro_sincronizacao, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstaceState) {
         super.onCreate(savedInstaceState);
         setRetainInstance(true);
+
+        IntentFilter filter = new IntentFilter(HotelIntentService.ACAO_SINCRONIZAR);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mServiceReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mServiceReceiver);
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View layout = inflater.inflate(R.layout.fragment_list_hotel, null);
+
+        mSwipeLayout = layout.findViewById(R.id.swipe_container);
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent, R.color.colorPrimaryDark);
+
+        return layout;
     }
 
     @Override
@@ -47,6 +92,15 @@ public class HotelListFragment extends ListFragment implements ActionMode.Callba
         mListView.setOnItemLongClickListener(this);
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mActionMode != null){
+            iniciarModoExclusao();
+            atualizarTitulo();
+        }
     }
 
     @Override
@@ -127,8 +181,8 @@ public class HotelListFragment extends ListFragment implements ActionMode.Callba
             @Override
             public void onClick(View v) {
                 for (Hotel hotel : hoteisExcluidos){
-                    hotel.id = 0;
-                    mRepositorio.salvar(hotel);
+                    hotel.status = Hotel.Status.ATUALIZAR;
+                    mRepositorio.inserirLocal(hotel, getActivity().getContentResolver());
                 }
                 limparBusca();
             }
@@ -174,14 +228,6 @@ public class HotelListFragment extends ListFragment implements ActionMode.Callba
         mAdapter.swapCursor(null);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(mActionMode != null){
-            iniciarModoExclusao();
-            atualizarTitulo();
-        }
-    }
 
     private void iniciarModoExclusao(){
         AppCompatActivity activity = (AppCompatActivity) getActivity();
@@ -212,7 +258,13 @@ public class HotelListFragment extends ListFragment implements ActionMode.Callba
         mActionMode.setTitle(selecionados);
     }
 
-//======================================INTERFACE=================================================
+    @Override
+    public void onRefresh() {
+        Intent it = new Intent(getActivity(), HotelIntentService.class);
+        getActivity().startService(it);
+    }
+
+    //======================================INTERFACE=================================================
     public interface AoClicarNoHotel{
         void clicouNoHotel(Hotel hotel);
     }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HotelHttp {
+
     public static final String SERVIDOR = "http://192.168.0.15/hotel_service";
     private static final String WEBSERVICE_URL = SERVIDOR + "/webservice.php";
     private Context mContext;
@@ -32,13 +33,16 @@ public class HotelHttp {
         enviarDadosPendentes();
 
         List<Hotel> hoteis = getHoteis();
+        List<Long> serverIds = new ArrayList<>();
 
         ContentResolver cr = mContext.getContentResolver();
 
         for (Hotel hotel : hoteis){
+            serverIds.add(hotel.idServidor);
             hotel.status = Hotel.Status.OK;
             mRepositorio.inserirLocal(hotel, cr);
         }
+        mRepositorio.excluirLocal(serverIds, cr);
     }
 
     private void enviarDadosPendentes() throws Exception{

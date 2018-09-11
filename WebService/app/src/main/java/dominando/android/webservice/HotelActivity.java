@@ -19,13 +19,15 @@ import android.view.View;
 import java.util.List;
 
 
-public class HotelActivity extends AppCompatActivity implements HotelListFragment.AoClicarNoHotel,
-        HotelDialogFragment.AoSalvarHotel, SearchView.OnQueryTextListener,
-        MenuItemCompat.OnActionExpandListener, HotelDetalheFragment.AoEditarHotel,
-        HotelListFragment.AoExcluirHoteis{
+public class HotelActivity extends AppCompatActivity
+                            implements  HotelListFragment.AoClicarNoHotel,
+                                        HotelDialogFragment.AoSalvarHotel,
+                                        SearchView.OnQueryTextListener,
+                                        MenuItemCompat.OnActionExpandListener,
+                                        HotelDetalheFragment.AoEditarHotel,
+                                        HotelListFragment.AoExcluirHoteis{
 
     public static final int REQUEST_EDITAR_HOTEL = 0;
-
     private long mIdSelecionado;
 
     private FragmentManager mFragmentManager;
@@ -41,48 +43,11 @@ public class HotelActivity extends AppCompatActivity implements HotelListFragmen
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_hotel, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint(getString(R.string.hint_busca));
-
-        MenuItemCompat.setOnActionExpandListener(searchItem, this);
-
-        return true;
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_EDITAR_HOTEL && resultCode == RESULT_OK){
             mListFragment.limparBusca();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.action_info:
-                SobreDialogFragment dialogFragment = new SobreDialogFragment();
-                dialogFragment.show(getSupportFragmentManager(), "sobre");
-                break;
-
-            /*case R.id.action_new:
-                HotelDialogFragment hotelDialogFragment = HotelDialogFragment.newInstace(null);
-                hotelDialogFragment.abrir(getSupportFragmentManager());
-                break;*/
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void adicionarHotelClick(View v){
-        HotelDialogFragment hotelDialogFragment = HotelDialogFragment.newInstace(null);
-        hotelDialogFragment.abrir(getSupportFragmentManager());
     }
 
     @Override
@@ -106,6 +71,43 @@ public class HotelActivity extends AppCompatActivity implements HotelListFragmen
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_hotel, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint(getString(R.string.hint_busca));
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mListFragment.buscar(newText);
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;  //para expandir a view.
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        mListFragment.limparBusca();
+        return true;   //para voltar ao normal.
+    }
+
+    @Override
     public void salvouHotel(Hotel hotel) {
         HotelRepositorio repositorio = new HotelRepositorio(this);
         repositorio.salvar(hotel);
@@ -113,6 +115,11 @@ public class HotelActivity extends AppCompatActivity implements HotelListFragmen
         if(isTablet()){
             clicouNoHotel(hotel);
         }
+    }
+
+    public void adicionarHotelClick(View v){
+        HotelDialogFragment hotelDialogFragment = HotelDialogFragment.newInstace(null);
+        hotelDialogFragment.abrir(getSupportFragmentManager());
     }
 
     @Override
@@ -143,26 +150,22 @@ public class HotelActivity extends AppCompatActivity implements HotelListFragmen
     }
 
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_info:
+                SobreDialogFragment dialogFragment = new SobreDialogFragment();
+                dialogFragment.show(getSupportFragmentManager(), "sobre");
+                break;
+
+            /*case R.id.action_new:
+                HotelDialogFragment hotelDialogFragment = HotelDialogFragment.newInstace(null);
+                hotelDialogFragment.abrir(getSupportFragmentManager());
+                break;*/
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        mListFragment.buscar(newText);
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        return true;  //para expandir a view.
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        mListFragment.limparBusca();
-        return true;   //para voltar ao normal.
-    }
 
     //========================================CLASS=================================================
     public static class SobreDialogFragment extends DialogFragment {

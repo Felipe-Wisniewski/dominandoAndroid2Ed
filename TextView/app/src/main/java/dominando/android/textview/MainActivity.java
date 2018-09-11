@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         final String textoEmHtml =
                 "<html><body>Html em "
                 + "<b>Negrito</b>, <i>Itálico</i>"
-                + "e <u>Sublinhado</u>.<br>"
+                + " e <u>Sublinhado</u>.<br>"
                 + "Mario: <img src='mario.png' /><br>"
                 + "Yoshi: <img src='yoshi.png' /><br>"
                 + "Um texto depois da imagem</body></html>";

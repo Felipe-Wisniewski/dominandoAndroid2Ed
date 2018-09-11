@@ -19,11 +19,20 @@ public class HotelCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
         TextView txtMessage = view.findViewById(R.id.txtNome_ih);
         RatingBar rtbEstrelas = view.findViewById(R.id.rtbEstrelas_ih);
 
-        txtMessage.setText(cursor.getString(cursor.getColumnIndex(HotelSQLHelper.COLUNA_NOME)));
         rtbEstrelas.setRating(cursor.getFloat(cursor.getColumnIndex(HotelSQLHelper.COLUNA_ESTRELAS)));
+        txtMessage.setText(cursor.getString(cursor.getColumnIndex(HotelSQLHelper.COLUNA_NOME)));
+
+        int status = cursor.getInt(cursor.getColumnIndex(HotelSQLHelper.COLUNA_STATUS));
+        if(status == Hotel.Status.EXCLUIR.ordinal()){
+            txtMessage.setTextColor(Color.RED);
+        }else {
+            txtMessage.setTextColor(Color.BLACK);
+        }
+
     }
 
     @Override
